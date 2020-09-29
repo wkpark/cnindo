@@ -40,6 +40,7 @@ C     INTEGER OPTION,OPNCLO,HUCKEL,CNDO,INDO,CLOSED,OPEN
       INTEGER OPTION,OPNCLO,HUCKEL,CNDO,INDO,CLOSED,OPEN
       INTEGER AN,CHARGE,CZ,U,ULIM,OCCA,OCCB
       INTEGER ORB,EL
+      Character*80 Today
 
 C     Pre-definded consts
       OPEN = 0
@@ -47,6 +48,7 @@ C     Pre-definded consts
       CNDO = 0
       INDO = 1
 
+      Write(6,59)
       CALL READIN
 
       IF (OPTION.EQ.CNDO) GOTO 6
@@ -71,6 +73,14 @@ C     Pre-definded consts
           CALL SCFCLO
           CALL CPRINT
       ENDIF
+      CALL FDate(Today)
+      WRITE(6,40) Today
+      Write(6,*) '== DONE =='
+   40 FORMAT(35X,' @ ',A30)
+   59 Format(1X,79('*')/,30X,
+     * 'CNDO/INDO CALCULATION'//,
+     * 12X,'QCPE PROGRAM(NO.141) BY JOHN A. POPLE AND PAUL A. DOBOSH',
+     * /1X,79('*'))
    60 FORMAT(/5X,I4,17H ATOMS CHARGE  = ,I4,18H  MULTIPLICITY  = ,I4/)
    70 FORMAT(I4,3(3X,F12.7))
   280 FORMAT(/)
