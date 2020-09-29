@@ -11,15 +11,19 @@ C
       INTEGER OPTION,OPNCLO,HUCKEL,CNDO,INDO,CLOSED,OPEN
       INTEGER AN,CHARGE,CZ,U,ULIM,OCCA,OCCB
       CHARACTER KEYWRD*241, ELEM*4, EL*4
-      CHARACTER LINE*80, SPACE*1, NINE*1, ZERO*1, COMMA*1
+      CHARACTER LINE*80, TITLE*80, Comment*80, SPACE*1
       DIMENSION VALUE(40)
       Integer AtoI
       LOGICAL LEADSP
-      DATA COMMA,SPACE,NINE,ZERO/',',' ','9','0'/
+      Character*4 CTYPE(2)
+      Character*6 COPNCLO(2)
+      DATA CTYPE/'CNDO','INDO'/
+      DATA COPNCLO/'OPEN  ','CLOSED'/
+      DATA SPACE/' '/
 
       Read(*,'(A80)') KEYWRD
-      Read(*,'(A80)') LINE ! title comment
-      Read(*,'(A80)') LINE ! title comment
+      Read(*,'(A80)') TITLE ! title
+      Read(*,'(A80)') Comment ! comment
 
       Call UpCase(KEYWRD)
 
@@ -41,7 +45,7 @@ C
 
       NATOMS = 0
       Do J = 1, 80
-          READ(5,'(A)') LINE
+          READ(5,'(A)', End=100, Err=100) LINE
           LEADSP = .TRUE.
           IFOUND = 0
           Do I = 1, 80
@@ -80,15 +84,21 @@ C
   100 Continue
 
       If (NATOMS.EQ.0) STOP
+      Write(6,'(1X,A)') KEYWRD(1:80)
+      Write(6,'(1X,A)') TITLE
+      Write(6,'(1X,A)') Comment
+      Write(6,50) CTYPE(OPTION+1), COPNCLO(OPNCLO+1)
       Write(6,60) NATOMS,CHARGE,MULTIP
       Do I=1,NATOMS
-          Write(6,70) AN(I),C(I,1)*0.529177D0,C(I,2)*0.529177D0,
+          Write(6,70) EL(AN(I)),C(I,1)*0.529177D0,C(I,2)*0.529177D0,
      + C(I,3)*0.529177D0
-          Write(2,70) AN(I),C(I,1)*0.529177D0,C(I,2)*0.529177D0,
+          Write(2,70) EL(AN(I)),C(I,1)*0.529177D0,C(I,2)*0.529177D0,
      + C(I,3)*0.529177D0
       End Do
-60    Format(/5X,I4,16H ATOMS CHARGE = ,I4,17H  MULTIPLICITY = ,I4/)
-70    Format(I4,3(3X,F12.7))
+      Write(6,*)
+   50 Format(/5X,A4,1X,A6)
+   60 Format(5X,I4,16H ATOMS CHARGE = ,I4,17H  MULTIPLICITY = ,I4/)
+   70 Format(2X,A2,3(3X,F12.7))
       END
 
       Integer Function AtoI(A)
