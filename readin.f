@@ -93,8 +93,6 @@ C
       Do I=1,NATOMS
           Write(6,70) EL(AN(I)),C(I,1)*0.529177D0,C(I,2)*0.529177D0,
      + C(I,3)*0.529177D0
-          Write(2,70) EL(AN(I)),C(I,1)*0.529177D0,C(I,2)*0.529177D0,
-     + C(I,3)*0.529177D0
       End Do
       Write(6,*)
    50 Format(/5X,A4,1X,A6)
