@@ -3,8 +3,9 @@ C     Read MOPAC style input file.
 C
       Subroutine ReadIn
       IMPLICIT REAL*8(A-H,O-Z)
-      COMMON /PERTBL/EL(18)
-      COMMON /INFO/ NATOMS,CHARGE,MULTIP,AN(35),C(35,3),N
+      PARAMETER (NUMATM=140, MAXORB=350, MAXELEM=29)
+      COMMON /PERTBL/EL(MAXELEM)
+      COMMON /INFO/ NATOMS,CHARGE,MULTIP,AN(NUMATM),N,C(NUMATM,3)
       COMMON /OPTION/ OPTION,OPNCLO,HUCKEL,CNDO,INDO,CLOSED,OPEN
       COMMON /KEYWRD/ KEYWRD
 
@@ -63,7 +64,7 @@ C
                   ELEM = LINE(I:I+1)
                   ! get coordinates
                   READ(LINE(I+2:),*,ERR=100) (VALUE(K),K=1,3)
-                  Do K = 1, 18
+                  Do K = 1, MAXELEM
                       IF(ELEM.EQ.EL(K)) THEN
                          AN(J) = K
                          IFOUND = 1
